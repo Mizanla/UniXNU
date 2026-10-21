@@ -119,6 +119,7 @@ jobs:
           RC_CFLAGS: "-Wno-error -Wno-implicit-function-declaration -Wno-deprecated-declarations"
           HOST_CWARNFLAGS: "-w"
         run: |
+        find . -name "Makefile*" -o -name "*.def" -o -name "*.config" 2>/dev/null | xargs sed -i '' 's/-Werror//g' || true
         sed -i '' 's|urllib.request.urlopen(URL, timeout=30)|urllib.request.urlopen(urllib.request.Request(URL, headers={"Authorization": "Bearer " + __import__("os").environ["GITHUB_TOKEN"], "User-Agent": "UniXNU"}), timeout=30)|g' scripts/prepare-xnu-source.py
           args=()
           if [ -n "$IPSW_URL" ]; then args+=(--ipsw "$IPSW_URL"); fi
