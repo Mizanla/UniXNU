@@ -116,6 +116,8 @@ jobs:
         env:
           IPSW_URL: ${{ inputs.ipsw_url }}
           GITHUB_TOKEN: ${{ github.token }}
+          CFLAGS: "-Wno-error -Wno-implicit-function-declaration -Wno-deprecated-declarations"
+          HOST_CFLAGS: "-Wno-error -Wno-implicit-function-declaration -Wno-deprecated-declarations"
         run: |
         sed -i '' 's|urllib.request.urlopen(URL, timeout=30)|urllib.request.urlopen(urllib.request.Request(URL, headers={"Authorization": "Bearer " + __import__("os").environ["GITHUB_TOKEN"], "User-Agent": "UniXNU"}), timeout=30)|g' scripts/prepare-xnu-source.py
           args=()
