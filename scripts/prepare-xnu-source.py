@@ -37,7 +37,11 @@ if __name__ == '__main__':
         raise SystemExit('Create the local XNU work source before preparing headers')
     if not CACHE.exists():
         CACHE.parent.mkdir(parents=True, exist_ok=True)
-        CACHE.write_bytes(urllib.request.urlopen(URL, timeout=30).read())
+        req = urllib.request.Request(URL, headers={
+    "User-Agent": "UniXNU",
+    **({"Authorization": f"Bearer {__import__('os').environ['GITHUB_TOKEN']}"} if __import__('os').environ.get('GITHUB_TOKEN') else {})
+})
+CACHE.write_bytes(urllib.request.urlopen(req, timeout=30).read())
     entries = json.loads(CACHE.read_text())
     crypto_cache = CACHE.with_name(f'xnu-driverkit-crypto-{TAG.removeprefix("xnu-")}.json')
     if not crypto_cache.exists():
